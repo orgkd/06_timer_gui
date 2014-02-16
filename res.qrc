@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/sound">
+        <file>sound/alarm.wav</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>images/timer.ico</file>
+    </qresource>
+</RCC>

@@ -9,6 +9,9 @@
 #include <QMessageBox>
 #include <QStyle>
 #include <QtWin>
+#include <QSystemTrayIcon>
+#include <QPalette>
+#include <QSound>
 
 
 #endif // COMMONIMPORT_H

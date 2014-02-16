@@ -10,9 +10,16 @@ Dialog::Dialog(QWidget *parent) :
     QtWin::extendFrameIntoClientArea(this, -1, -1, -1, -1);
     setWindowFlags(Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
     setAttribute(Qt::WA_NoSystemBackground, false);
+    ui->timeEdit->setAttribute(Qt::WA_NoSystemBackground, true);
     setAttribute(Qt::WA_TranslucentBackground, true);
-    setStyleSheet("label {background:transparent;}");
     setContentsMargins(0,0,0,0);
+
+    QPalette pal = QPalette(this->palette());
+    pal.setColor(QPalette::Base, QColor(255,255,255));
+    pal.setColor(QPalette::Highlight, QColor(0,0,0,0));
+    pal.setColor(QPalette::HighlightedText, QColor(0,0,0));
+    this->setPalette(pal);
+    ui->timeEdit->setPalette(pal);
 
     // TIMERS
     timer = new mytimer();
@@ -21,6 +28,8 @@ Dialog::Dialog(QWidget *parent) :
     playImage = new QIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     stopImage = new QIcon(style()->standardIcon(QStyle::SP_MediaStop));
     pauseImage = new QIcon(style()->standardIcon(QStyle::SP_MediaPause));
+    timerIcon = new QIcon("images/timer.ico");
+    alarm = new QSound("sound/alarm.wav");
 
     ui->startButton->setIcon(*playImage);
     ui->resetButton->setIcon(*stopImage);
@@ -29,6 +38,11 @@ Dialog::Dialog(QWidget *parent) :
     ui->startButton->setIconSize(QSize(32,32));
     ui->resetButton->setIconSize(QSize(16, 16));
     ui->stopButton->setIconSize(QSize(16, 16));
+
+    this->setWindowIcon(*timerIcon);
+    this->setWindowTitle("Timer");
+    trayIcon = new QSystemTrayIcon(*timerIcon);
+    trayIcon->show();
 
     /*****************  CONNECTIONS   ***************************/
     connect(this->oneSecond, SIGNAL(timeout()),
@@ -73,6 +87,7 @@ void Dialog::on_resetButton_clicked()
     qDebug() << "Timer stopped.";
     ui->timeEdit->setEnabled(true);
     ui->startButton->setEnabled(true);
+    this->alarm->stop();
 }
 
 
@@ -103,11 +118,13 @@ void Dialog::timer_expired()
     qDebug() << "expired";
     QApplication::alert(this, 20000);
 
-    QMessageBox::information(this,
-                             "Timer expired",
-                             "Timer expired.",
-                             QMessageBox::Ok);
+    trayIcon->showMessage("Information", \
+                          "Timer expired", \
+                          QSystemTrayIcon::Information,
+                          1000);
     ui->timeEdit->setEnabled(true);
+    this->alarm->play();
+
 }
 
 

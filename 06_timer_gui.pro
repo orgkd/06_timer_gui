@@ -6,6 +6,7 @@
 
 QT       += core gui
 QT       += winextras
+QT       += multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,3 +23,5 @@ HEADERS  += commonimport.h \
     mytimer.h
 
 FORMS    += dialog.ui
+
+RESOURCES +=

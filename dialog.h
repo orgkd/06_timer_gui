@@ -30,6 +30,9 @@ private:
     QIcon *playImage;
     QIcon *stopImage;
     QIcon *pauseImage;
+    QIcon *timerIcon;
+    QSystemTrayIcon *trayIcon;
+    QSound *alarm;
     bool runnig;
 
 signals:
